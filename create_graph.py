@@ -29,14 +29,19 @@ def draw_graph(nx_graph):
         lat, lon = nx_graph.nodes[n]['lat'], nx_graph.nodes[n]['lon']
         x, y = transformer.transform(lon, lat)
         pos[n] = (x, y)
-    fig, axes = plt.subplots(1,1,dpi=72)
+    fig, axes = plt.subplots(1,1,dpi=70)  # higher DPI
     nx.draw(nx_graph, pos=pos, ax=axes, with_labels=True)
-    ctx.add_basemap(axes, crs="EPSG:3857")
+    ctx.add_basemap(
+        axes,
+        crs="EPSG:3857",
+        source=ctx.providers.OpenStreetMap.Mapnik,  # a supported provider
+        zoom=14  # higher zoom level
+    )
     plt.show()
     
 # Example usage
 if __name__ == "__main__":
-    graph = create_graph_from_csv("cyclone_city_statues_with_coordinates.csv")
+    graph = create_graph_from_csv("final_cyclone_city_statues_with_coordinates.csv")
     
     # Add edges with weights
     add_edge(graph, '1', '2', 10)
