@@ -24,7 +24,7 @@ with open(input_csv, 'r') as infile, open(output_csv, 'w', newline='') as outfil
     for row in reader:
             id_, name, location, address, long, lat = row
 
-            destination_coords = (float(long), float(lat))  # Central Park
+            destination_coords = (float(long), float(lat))
             distance = calculate_walking_distance_osmnx(origin_coords, destination_coords)
             writer = csv.writer(outfile)
             writer.writerow([id_, name, location, address, long, lat, distance])

@@ -4,6 +4,7 @@ from time import sleep
 
 # Initialize the geolocator
 geolocator = Nominatim(user_agent="cyclone_city_geocoder")
+loc = Nominatim(user_agent="Geopy Library")
 
 # Read the CSV file
 input_csv = './cyclone_city_statues.csv'
@@ -16,7 +17,9 @@ def get_lat_long(address):
         if location:
             print(f"Geocoded {address} successfully")
             return location.latitude, location.longitude
-        
+        else:
+            print(f"Geocoded {address} UNSUCCESSFULLY")
+
         return None, None
     except Exception as e:
         print(f"Error fetching coordinates for {address}: {e}")
@@ -30,9 +33,16 @@ with open(input_csv, 'r') as infile, open(output_csv, 'w', newline='') as outfil
     # Read each row and append coordinates
     for row in reader:
         id_, name, location, address = row
+        print(id_, address)
         if address:
-            lat, long = get_lat_long(address)
-            sleep(1)  # Pause to avoid overwhelming the geocoding service
+            if id_ == '13':
+                print("IN ID 13")
+                lat, long = 42.026861,-93.652451
+            else:
+                lat, long = get_lat_long(address)
+                sleep(1)  # Pause to avoid overwhelming the geocoding service
+        elif id_ == '17':
+            lat, long = 42.012313,-93.635931
         else:
             lat, long = None, None
 
