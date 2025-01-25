@@ -37,7 +37,8 @@ def calculate_walking_distances(nodes, walking_graph):
         A NetworkX weighted graph with walking distances.
     """
     print(f"Starting calculations for {len(nodes)} nodes...")
-    print(f"Total pairs to process: {len(nodes) * (len(nodes) - 1) // 2}")
+    total_pairs = len(nodes) * (len(nodes) - 1) // 2
+    print(f"Total pairs to process: {total_pairs}")
     start_time = time.time()
     processed = 0
     G = nx.Graph()
@@ -48,11 +49,11 @@ def calculate_walking_distances(nodes, walking_graph):
                 processed += 1
                 if processed % 10 == 0:  # Update every 10 pairs
                     elapsed = time.time() - start_time
-                    rate = processed / elapsed
-                    remaining_pairs = (len(nodes) * (len(nodes) - 1) // 2) - processed
-                    estimated_remaining_time = remaining_pairs / rate if rate > 0 else 0
-                    print(f"Processed {processed} pairs. "
-                          f"Estimated time remaining: {estimated_remaining_time/60:.1f} minutes")
+                    rate = processed / elapsed if elapsed > 0 else 0
+                    remaining_pairs = max(0, total_pairs - processed)
+                    estimated_remaining_time = remaining_pairs / rate if rate > 0 else float('inf')
+                    print(f"Processed {processed}/{total_pairs} pairs. "
+                          f"Estimated time remaining: {max(0, estimated_remaining_time/60):.1f} minutes")
 
                 # Find the nearest OSMnx nodes to our coordinates
                 osm_node1 = ox.distance.nearest_nodes(walking_graph, lon1, lat1)
